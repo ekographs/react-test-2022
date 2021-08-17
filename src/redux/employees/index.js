@@ -22,8 +22,10 @@ const employeeSlice = createSlice({
       prepare: employee => ({
         payload: { ...employee, id: new Date().getTime() },
       }),
+      // spread operator adding more data to the end of the array
       reducer(draftState, action) {
-        draftState.employees_records = [action.payload];
+        draftState.employees_records = [...draftState.employees_records, action.payload];
+        // const emp = [...draftState.employees_records];
       },
     },
   },
