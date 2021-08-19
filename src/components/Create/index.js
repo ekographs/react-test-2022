@@ -12,8 +12,9 @@ const Create = () => {
   const dispatch = useDispatch();
   const submitForm = useCallback(
     employee => {
-      console.log({ employee });
+      // console.log({ employee });
       dispatch(saveNewEmployee(employee));
+      // localStorage.setItem("eko", JSON.stringify(employee));
     },
     [dispatch]
   );
@@ -25,6 +26,7 @@ const Create = () => {
         validationSchema={formValidationSchema}
         onSubmit={submitForm}
         initialValues={{
+          id: new Date().getTime(),
           firstName: "hgcg",
           surname: "kkhb",
           email: "nk@gmail.com",
