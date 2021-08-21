@@ -10,7 +10,13 @@ const FormButtons = () => {
   return (
     <Flex justifyContent="center">
       <Box marginRight="sm">
-        <Button data-cy="backButton" onClick={() => history.goBack()}>
+        <Button
+          data-cy="backButton"
+          onClick={e => {
+            e.preventDefault();
+            history.goBack();
+          }}
+        >
           Back
         </Button>
       </Box>

@@ -1,39 +1,53 @@
-import React, { useCallback } from "react";
+import React from "react";
+import { toast } from "react-toastify";
 import { Formik, Field, Form } from "formik";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { useHistory } from "react-router";
 import { Flex, Header } from "../styled";
 import FormField from "./FormField";
 import FormButtons from "./FormButtons";
 import formValidationSchema from "./formValidationSchema";
-import { saveNewEmployee } from "../../redux/employees/actionCreators";
+import { saveNewEmployee, editEmployee } from "../../redux/employees/actionCreators";
 import "./status.css";
 
-const Create = () => {
+const Create = ({
+  match: {
+    params: { id },
+  },
+}) => {
   const dispatch = useDispatch();
-  const submitForm = useCallback(
-    employee => {
-      // console.log({ employee });
-      dispatch(saveNewEmployee(employee));
-      // localStorage.setItem("eko", JSON.stringify(employee));
-    },
-    [dispatch]
-  );
+  const employees = useSelector(state => state.employees.employees_records);
+  const employee = employees.find(e => e.id.toString() === id);
+  const history = useHistory();
+
+  const submitForm = emp => {
+    if (employee) {
+      dispatch(editEmployee(emp));
+    } else {
+      dispatch(saveNewEmployee(emp));
+    }
+    toast.success("Employee Saved!");
+    history.goBack();
+  };
+  // [dispatch, employee]
 
   return (
     <>
-      <Header>Create new employee</Header>
+      <Header>{employee ? "Edit Employee" : "Create New Employee"}</Header>
       <Formik
         validationSchema={formValidationSchema}
         onSubmit={submitForm}
-        initialValues={{
-          id: new Date().getTime(),
-          firstName: "hgcg",
-          surname: "kkhb",
-          email: "nk@gmail.com",
-          age: "22",
-          jobTitle: "vet",
-          status: "Active",
-        }}
+        initialValues={
+          employee || {
+            id: new Date().getTime(),
+            firstName: "hgcg",
+            surname: "kkhb",
+            email: "nk@gmail.com",
+            age: "22",
+            jobTitle: "vet",
+            status: "Active",
+          }
+        }
       >
         <Form>
           <Flex alignItems="center" justifyContent="center" height="100%">

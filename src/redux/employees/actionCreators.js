@@ -4,3 +4,9 @@ import * as actions from ".";
 export const saveNewEmployee = employee => dispatch => {
   dispatch(actions.saveNewEmployee(employee));
 };
+export const delEmployee = employeeId => dispatch => {
+  dispatch(actions.delEmployee(employeeId));
+};
+export const editEmployee = employee => dispatch => {
+  dispatch(actions.editEmployee(employee));
+};

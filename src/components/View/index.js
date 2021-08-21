@@ -1,6 +1,7 @@
 import React from "react";
 import { useHistory } from "react-router";
-import { useSelector } from "react-redux";
+import { Link } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
 // import employeeSlice from "../../redux/employees";
 import { withStyles, makeStyles } from "@material-ui/core/styles";
 import Table from "@material-ui/core/Table";
@@ -12,8 +13,10 @@ import TableRow from "@material-ui/core/TableRow";
 import Paper from "@material-ui/core/Paper";
 import Button from "@material-ui/core/Button";
 import ButtonGroup from "@material-ui/core/ButtonGroup";
+import { delEmployee } from "../../redux/employees/actionCreators";
 import { Flex, Header } from "../styled";
 import "./employeestyle.css";
+// import { flex } from "../styled/utils";
 
 // import data from "./employees-data.json";
 // spreading the employee state
@@ -21,6 +24,7 @@ const View = () => {
   const employees = useSelector(state => state.employees.employees_records);
   // setEmployees
   const history = useHistory();
+  const dispatch = useDispatch();
 
   const StyledTableCell = withStyles(theme => ({
     head: {
@@ -42,12 +46,26 @@ const View = () => {
   }))(TableRow);
   const useStyles = makeStyles(theme => ({
     root: {
+      display: "flex",
+      flexDirection: "column",
+      alignItems: "center",
+      "& > *": {
+        margin: theme.spacing(1),
+      },
+    },
+  }));
+  const useButtonStyles = makeStyles(theme => ({
+    root: {
+      display: "flex",
+      flexDirection: "column",
+      alignItems: "center",
       "& > *": {
         margin: theme.spacing(1),
       },
     },
   }));
   const classes = useStyles();
+  const buttonStyles = useButtonStyles();
   return (
     <>
       <Header data-cy="header">View Employees</Header>
@@ -77,10 +95,20 @@ const View = () => {
                 <StyledTableCell align="center">{employee.jobTitle}</StyledTableCell>
                 <StyledTableCell align="center">{employee.status}</StyledTableCell>
                 <StyledTableCell align="center">
-                  <ButtonGroup variant="contained" aria-label="contained primary button group">
-                    <Button color="primary">Edit</Button>
-                    <Button color="secondary">Delete</Button>
-                  </ButtonGroup>
+                  <div className={buttonStyles.root}>
+                    <ButtonGroup variant="contained" aria-label="contained primary button group">
+                      <Link to={`/edit/${employee.id}`}>
+                        <Button color="primary">Edit</Button>
+                      </Link>
+                      <Button
+                        style={{ marginLeft: "5px" }}
+                        color="secondary"
+                        onClick={() => dispatch(delEmployee(employee.id))}
+                      >
+                        Delete
+                      </Button>
+                    </ButtonGroup>
+                  </div>
                 </StyledTableCell>
               </StyledTableRow>
             ))}
